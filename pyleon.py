@@ -56,6 +56,7 @@ class PyLeon:
             if timestamp in file:
                 outfile = directory + '/' + ''.join(file.split(timestamp))
                 os.system('cp ' + directory + '/' + file + ' ' + outfile)
+                print("Trying to remove: " + 'rm ' + directory + '/' + file)
                 os.system('rm ' + directory + '/' + file)
                 break
         os.system('rm ' + timestamp_file)
