@@ -2,9 +2,9 @@ import os
 import time  
 
 class PyLeon:
-    def __new__(cls):
+    def __new__(cls, **kwargs):
         try: 
-            return object.__new__(cls)
+            return object.__new__(cls, **kwargs)
         except FileNotFoundError:
             return None 
 
@@ -64,4 +64,5 @@ class PyLeon:
                 os.system('cp ' + file + ' ' + outfile)
                 break
         os.system('rm ' + file)
+        os.system('rm ' + timestamp_file)
         return outfile 
