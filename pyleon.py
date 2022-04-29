@@ -50,7 +50,7 @@ class PyLeon:
 
     def _execute(self, filename, args):
         timestamp = str(time.time())
-        timestamp_file = filename.split('/')[:-1] + '/' + timestamp + filename.split('/')[-1]
+        timestamp_file = '/'.join(filename.split('/')[:-1]) + '/' + timestamp + filename.split('/')[-1]
         os.system('cp ' + filename + ' ' + timestamp_file)
         os.system(self.leon_path + ' -file' + timestamp_file + ' '.join(args) + ' >/dev/null' if self.silent else '')
         for file in os.listdir('/'.join(filename.split('/')[:-1])):
