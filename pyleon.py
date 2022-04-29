@@ -47,7 +47,7 @@ class PyLeon:
         directory = '/'.join(filename.split('/')[:-1])
         timestamp_file = directory + '/' + timestamp + filename.split('/')[-1]
         os.system(f'cp {filename} {timestamp_file}')
-        os.system(f"{self.leon_path} -file {timestamp_file} {' '.join(args)} {' >/dev/null' if self.silent else ''}")
+        os.system(f"{self.leon_path} -file {timestamp_file} {' '.join(args)} {' >/dev/null 2>&1' if self.silent else ''}")
         os.system('rm ' + timestamp_file)
         outfile = None 
         for file in os.listdir('/'.join(filename.split('/')[:-1])):
