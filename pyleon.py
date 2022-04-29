@@ -51,6 +51,7 @@ class PyLeon:
         print(f"{self.leon_path} -file {timestamp_file} {' '.join(args)} {' >/dev/null' if self.silent else ''}")
         os.system(f'cp {filename} {timestamp_file}')
         os.system(f"{self.leon_path} -file {timestamp_file} {' '.join(args)} {' >/dev/null' if self.silent else ''}")
+        os.system('rm ' + timestamp_file)
         outfile = None 
         for file in os.listdir('/'.join(filename.split('/')[:-1])):
             if timestamp in file:
@@ -59,5 +60,4 @@ class PyLeon:
                 print("Trying to remove: " + 'rm ' + directory + '/' + file)
                 os.system('rm ' + directory + '/' + file)
                 break
-        os.system('rm ' + timestamp_file)
         return outfile 
