@@ -55,8 +55,8 @@ class PyLeon:
         for file in os.listdir('/'.join(filename.split('/')[:-1])):
             if timestamp in file:
                 outfile = directory + '/' + ''.join(file.split(timestamp))
-                os.system('cp ' + file + ' ' + outfile)
+                os.system('cp ' + directory + '/' + file + ' ' + outfile)
                 break
-        os.system('rm ' + file)
+        os.system('rm ' + directory + '/' + file)
         os.system('rm ' + timestamp_file)
         return outfile 
