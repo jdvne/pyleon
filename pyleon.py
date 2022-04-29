@@ -54,7 +54,7 @@ class PyLeon:
         outfile = None 
         for file in os.listdir('/'.join(filename.split('/')[:-1])):
             if timestamp in file:
-                outfile = ''.join(file.split(timestamp))
+                outfile = directory + '/' + ''.join(file.split(timestamp))
                 os.system('cp ' + file + ' ' + outfile)
                 break
         os.system('rm ' + file)
