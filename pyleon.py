@@ -2,9 +2,19 @@ import os
 import time  
 
 class PyLeon:
-    def __init__(self, silent = False):
+    def __new__(cls):
+        try: 
+            return object.__new__(cls)
+        except FileNotFoundError:
+            return None 
+
+    def __init__(self, silent = False, leon_path = './leon/leon'):
         self.silent = silent
-        # check that leon exists
+        self.leon_path = leon_path
+        code = os.system(leon_path + ' >/dev/null 2>&1')
+        if code != 0:
+            print("Error: please make sure the LEON executable exists at " + leon_path)
+            raise FileNotFoundError
 
     def compress(self, file, kmer_size = None, abundance = None, nb_cores = None, lossless = False, seq_only = False, noheader = False, noqual = False):
         '''
@@ -15,10 +25,10 @@ class PyLeon:
             :param nb_cores:    number of cores (default is the maximum available number of cores)
             :param lossless:    switch to lossless compression for qualities (default is lossy. lossy has much higher compression rate, and the loss is in fact a gain. lossy is better!)
             :param seq_only:    store dna sequence only, header and qualities are discarded, will decompress to fasta (same as -noheader -noqual)
-            :param noheader:    
-            :param noqual:      
+            :param noheader:    discard header
+            :param noqual:      discard quality scores
         '''
-        command = ['-file', file, '-c']
+        command = ['-c']
         if kmer_size is not None: command.append('-kmer-size ' + str(kmer_size))
         if abundance is not None: command.append('-abundance ' + str(abundance))
         if nb_cores is not None: command.append('-nb-cores ' + str(nb_cores))
@@ -26,22 +36,27 @@ class PyLeon:
         if seq_only: command.append('-seq-only')
         if noheader: command.append('-noheader')
         if noqual: command.append('-noqual')
-        if self._execute(file, command) == 0:
-            filename = file.split(".")
-            while True:
-                if filename[-1] in ["fastq", "fasta", "gz"]:
-                    del filename[-1]
-                else: break 
-            return ".".join(filename) + ".leon"
-        return None 
+        return self._execute(file, command)
 
     def decompress(self, file, nb_cores = -1):
-        command = ['-file', file, '-d']
+        '''
+            Decompress a leon file.
+            :param file:        File to decompress
+            :param nb_cores:    number of cores (default is the maximum available number of cores)
+        '''
+        command = ['-d']
         if nb_cores != -1: command.append('-nb-cores ' + str(nb_cores))
         return self._execute(file, command)
 
     def _execute(self, filename, args):
         timestamp = str(time.time())
-        os.system('cp ' + filename + ' ' + timestamp + '_' + filename.split("/")[-1])
-        ret = os.system('./leon/leon ' + ' '.join(args) + " >/dev/null" if self.silent else "")
-        for file in os.listdir('./'):
+        timestamp_file = '/'.join(filename.split('/').insert(-1, timestamp))
+        os.system('cp ' + filename + ' ' + timestamp_file)
+        os.system(self.leon_path + ' -file' + timestamp_file + ' '.join(args) + ' >/dev/null' if self.silent else '')
+        for file in os.listdir('/'.join(filename.split('/')[:-1])):
+            if timestamp in file:
+                outfile = ''.join(file.split(timestamp))
+                os.system('cp ' + file + ' ' + outfile)
+                os.system('rm ' + file)
+                return outfile
+        return None 
