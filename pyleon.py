@@ -2,12 +2,6 @@ import os
 import time  
 
 class PyLeon:
-    def __new__(cls, **kwargs):
-        try: 
-            return super(PyLeon, cls).__new__(cls, **kwargs)
-        except FileNotFoundError:
-            return None 
-
     def __init__(self, silent = False, leon_path = './leon/leon'):
         self.silent = silent
         self.leon_path = leon_path
