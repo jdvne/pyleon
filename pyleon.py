@@ -4,7 +4,7 @@ import time
 class PyLeon:
     def __new__(cls, **kwargs):
         try: 
-            return object.__new__(cls, **kwargs)
+            return super(PyLeon, cls).__new__(cls, **kwargs)
         except FileNotFoundError:
             return None 
 
