@@ -49,7 +49,7 @@ class PyLeon:
         return self._execute(file, command)
 
     def _execute(self, filename, args):
-        timestamp = str(time.time())
+        timestamp = ''.join(str(time.time()).split('.'))
         timestamp_file = '/'.join(filename.split('/')[:-1]) + '/' + timestamp + filename.split('/')[-1]
         os.system('pwd')
         os.system('cp ' + filename + ' ' + timestamp_file)
