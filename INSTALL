@@ -23,3 +23,6 @@ make -j4
 cp ./bin/leon ../
 # Go back at the installation root directory
 cd ../..
+
+# add pyleon to the user's python modules
+python3 -m pip install -e .

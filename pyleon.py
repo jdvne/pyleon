@@ -1,7 +1,12 @@
 import os 
 import time
 
-DEF_LEON_PATH = './leon/leon'
+DEF_LEON_PATH = os.path.join(
+    os.path.abspath(__file__).replace(os.path.basename(__file__), ''),
+    'leon', 
+    'leon'
+)
+
 ARG_SUPPRESS_OUTPUT = '>/dev/null 2>&1'
 
 class PyLeon:
@@ -20,15 +25,15 @@ class PyLeon:
 
         if not os.path.exists(leon_path):
             print(f"ERROR: LEON executable does not exist at {leon_path}.")
-            raise FileNotFoundError
+            raise FileNotFoundError(leon_path)
         
         if os.system(f'{leon_path} {ARG_SUPPRESS_OUTPUT}') != 0:
             print(f"ERROR: LEON executable could not be run at {leon_path}.")
             raise RuntimeError
 
 
-    def compress(self, file: str, kmer_size: int=None, abundance:int =None, 
-        nb_cores:int=None, lossless=False, seq_only=False, noheader=False, noqual=False):
+    def compress(self, file, kmer_size=None, abundance=None, nb_cores=None, 
+        lossless=False, seq_only=False, noheader=False, noqual=False):
         '''
             Compress a fastq/fasta file.
             :param file:        File to compress

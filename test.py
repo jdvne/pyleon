@@ -30,7 +30,7 @@ def test_file(filepath, lossless):
     print(f'lossless:           {lossless}')
     print(f'hashes match:       {match}')
 
-    os.remove(leon_file)
+    # os.remove(leon_file)
     os.remove(d_file)
 
 
@@ -45,7 +45,7 @@ def test_dir_files(dirname, absolute=False, lossless=True):
         test_file(filepath, lossless)
 
 
-# test_dir_files('./fasta')
+test_dir_files('./fasta', lossless=True)
 # test_dir_files('./fastq')
-test_dir_files('./fastq', lossless=False)
-test_dir_files('./fastq', absolute=True)
+# test_dir_files('./fastq', absolute=True)
+test_dir_files('./fastq', lossless=True)
